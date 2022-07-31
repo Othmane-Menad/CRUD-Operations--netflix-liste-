@@ -29,7 +29,7 @@ export async function deleteData(url) {
 }
 
 // Update
-export async function putData(url, data) {
+export async function updateData(url, data) {
   const response = await fetch(url, {
     method: "PUT",
     headers: {
