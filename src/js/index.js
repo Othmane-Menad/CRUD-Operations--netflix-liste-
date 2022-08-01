@@ -14,6 +14,46 @@ document.querySelector("#tbody").addEventListener("click", enableEdit);
 // Listen for cancel btn
 document.querySelector(".container").addEventListener("click", cancelEdit);
 
+// Function to add event listener over a nodelist
+function addEventListenerByClass(className, event, func) {
+  let list = document.querySelectorAll(className); // A nodelist output not an Array
+
+  // Convert the nodelist into an array so we can use map
+  //[...list] will convert it into an array too
+  let arrList = Array.from(list);
+
+  // Removing the last columns of the array which are the delete and edit because we don't need them
+  arrList.length = arrList.length - 2;
+
+  arrList.map((element) => {
+    element.addEventListener(event, func);
+  });
+}
+addEventListenerByClass("th", "click", Sorting);
+// Sorting by column
+function Sorting(e) {
+  // console.log(e.target.dataset.column);
+  let column = e.target.dataset.column;
+  let order = e.target.dataset.order;
+  console.log(column, order);
+
+  getData().then((element) => {
+    let filteredData = [];
+
+    if (order === "desc") {
+      e.target.dataset.order = "asc";
+      // This is a sorting Algorithm
+      filteredData = element.sort((a, b) => (a[column] > b[column] ? 1 : -1));
+    } else {
+      e.target.dataset.order = "desc";
+      filteredData = element.sort((a, b) => (a[column] < b[column] ? 1 : -1));
+    }
+
+    populateTable(filteredData);
+  });
+  e.preventDefault();
+}
+
 // Listener for Search input
 const search = document
   .querySelector("#search")
@@ -73,7 +113,7 @@ function addData(e) {
 // Search
 function searching(e) {
   let data = e.target.value;
-  const allData = [];
+  // const allData = [];
 
   getData().then((element) => {
     // initial idea was to deep copy the whole array of object into a new array then filter from there
@@ -121,7 +161,7 @@ function enableEdit(e) {
   if (e.target.classList.contains("edit")) {
     const id = parseInt(e.target.dataset.id);
 
-    //     // Selecting the title starting from the i that contain the class edit
+    // Selecting the type starting from the element that contain the class "edit"
     const type =
       e.target.parentElement.previousElementSibling.previousElementSibling
         .previousElementSibling.previousElementSibling.previousElementSibling

@@ -45,18 +45,21 @@ export const changeFormState = (type) => {
   if (type === "edit") {
     btn.textContent = "Update Post";
 
-    // Create cancel button
-    const button = document.createElement("button");
-    button.className = "post-cancel";
-    button.appendChild(document.createTextNode("Cancel Edit"));
+    // Condition if the cancel button existe do not create it again
+    if (!document.querySelector(".post-cancel")) {
+      // Create cancel button
+      const button = document.createElement("button");
+      button.className = "post-cancel";
+      button.appendChild(document.createTextNode("Cancel Edit"));
 
-    // Get Parent
-    const cardForm = document.querySelector(".container");
+      // Get Parent
+      const cardForm = document.querySelector(".container");
 
-    // Get element to insert before
-    const formEnd = document.querySelector("form-end");
-    // Insert the cancel button
-    cardForm.insertBefore(button, formEnd);
+      // Get element to insert before
+      const formEnd = document.querySelector("form-end");
+      // Insert the cancel button
+      cardForm.insertBefore(button, formEnd);
+    }
   } else {
     btn.textContent = "Submit Post";
 
