@@ -1,12 +1,18 @@
 import "../style/style.scss";
-import { getData, postData, deleteData, putData } from "./http.js";
-import { populateTable } from "./ui.js";
+import { getData, postData, deleteData, updateData } from "./http.js";
+import { populateTable, fillInputs, changeFormState } from "./ui.js";
 
 // Listener for when page load
 document.addEventListener("DOMContentLoaded", loadData);
 
 // Listener for the add button
-const btn = document.querySelector("#btn").addEventListener("click", addData);
+document.querySelector("#btn").addEventListener("click", addData);
+
+// Listen for edit state
+document.querySelector("#tbody").addEventListener("click", enableEdit);
+
+// Listen for cancel btn
+document.querySelector(".container").addEventListener("click", cancelEdit);
 
 // Listener for Search input
 const search = document
@@ -31,25 +37,36 @@ function loadData() {
 
 // Add data from inputs to the table
 function addData(e) {
-  const show_id = document.querySelector(".id").value;
+  const id = document.querySelector(".id").value;
   const type = document.querySelector(".type").value;
   const title = document.querySelector(".title").value;
   const director = document.querySelector(".director").value;
   const release_year = document.querySelector(".release_date").value;
 
   const data = {
-    show_id: show_id,
+    id: id,
     type: type,
     title: title,
     director: director,
     release_year: release_year,
   };
 
-  postData(data)
-    .then((data) => {
+  // Check for ID
+  if (id === "") {
+    // Empty mean it's not in edit mode
+    postData(data)
+      .then((data) => {
+        loadData();
+      })
+      .catch((err) => console.log("error while posting data: ", err));
+  } else {
+    // this mean the id has a number so we are in Edit mode
+    updateData(`http://localhost:3000/posts/${id}`, data).then((data) => {
+      changeFormState("add");
       loadData();
-    })
-    .catch((err) => console.log("error while posting data: ", err));
+    });
+  }
+
   e.preventDefault();
 }
 
@@ -99,6 +116,50 @@ function removePost(e) {
 }
 
 // Edit Post
+// Enable Edit state
+function enableEdit(e) {
+  if (e.target.classList.contains("edit")) {
+    const id = parseInt(e.target.dataset.id);
+
+    //     // Selecting the title starting from the i that contain the class edit
+    const type =
+      e.target.parentElement.previousElementSibling.previousElementSibling
+        .previousElementSibling.previousElementSibling.previousElementSibling
+        .textContent;
+
+    const title =
+      e.target.parentElement.previousElementSibling.previousElementSibling
+        .previousElementSibling.previousElementSibling.textContent;
+
+    const director =
+      e.target.parentElement.previousElementSibling.previousElementSibling
+        .previousElementSibling.textContent;
+
+    const release_year = parseInt(
+      e.target.parentElement.previousElementSibling.previousElementSibling
+        .textContent
+    );
+
+    const data = {
+      id: id,
+      type: type,
+      title: title,
+      director: director,
+      release_year: release_year,
+    };
+
+    fillInputs(data);
+  }
+  e.preventDefault();
+}
+
+// // Cancel Edit state
+function cancelEdit(e) {
+  if (e.target.classList.contains("post-cancel")) {
+    changeFormState("add");
+  }
+  e.preventDefault();
+}
 
 // trying to add a key value to the object id with increment number
 // getData().then((data) => {

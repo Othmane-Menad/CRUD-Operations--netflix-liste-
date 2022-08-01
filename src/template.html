@@ -9,7 +9,7 @@
   <body>
     <form action="#" class="container">
       <div class="input-groupe">
-        <input type="text" class="id" required />
+        <input type="number" class="id" required />
         <label for="id" id="lab">id</label>
       </div>
 
@@ -34,6 +34,8 @@
       </div>
       <button type="submit" id="btn">Add</button>
       <input type="text" id="search" placeholder="Search" />
+      <span class="form-end"></span>
+      <!--to insert the cancel button before it -->
     </form>
 
     <div class="Tcontainer">
@@ -45,8 +47,8 @@
             <th>title</th>
             <th>director</th>
             <th>release_year</th>
-            <th>#</th>
-            <th>#</th>
+            <th>Delete</th>
+            <th>Edit</th>
           </tr>
         </thead>
         <tbody id="tbody"></tbody>
