@@ -1,3 +1,13 @@
+:root {
+  --background: radial-gradient(
+    farthest-side ellipse at 10% 0,
+    #333867 20%,
+    #17193b
+  );
+  --widget-bg: rgba(0, 0, 0, 0.24);
+  --text-color: hsla(0, 0%, 100%, 0.9);
+}
+
 * {
   padding: 0;
   margin: 0;
@@ -7,6 +17,7 @@
 body {
   height: 100vh;
   display: flex;
+  background: var(--background);
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -67,29 +78,43 @@ form {
   height: 400px;
   overflow: auto;
   margin: 1rem;
-  border: 2px solid #333;
+  border-radius: 10px;
   table {
-    // table-layout: fixed;  enable it in responsive
+    table-layout: fixed;
     border: 1px solid #b3adad;
     word-wrap: break-word;
     border-collapse: collapse;
     padding: 5px;
     width: 100%;
+    column-gap: 20px;
 
-    th {
+    thead {
       position: sticky;
       top: -1px;
-      border: 2px solid #b3adad;
-      padding: 5px;
-      background: #f0f0f0;
-      color: #313030;
+      left: -1px;
+      th {
+        color: rgb(232, 230, 227);
+
+        background-color: rgb(27, 40, 130);
+        text-align: start;
+
+        border: 2px solid rgb(27, 40, 130);
+        padding: 18px 5px;
+        font-size: 1.2rem;
+
+        .arrow {
+          margin-left: 5px;
+          font-size: 1rem;
+          pointer-events: none;
+        }
+      }
     }
     td {
       border-collapse: collapse;
-      border: 1px solid #b3adad;
-      text-align: center;
+      border: 2px solid rgb(27, 40, 130);
+      text-align: start;
       padding: 5px;
-      background: #ffffff;
+      background: #fff;
       color: #313030;
     }
   }

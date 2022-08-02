@@ -30,29 +30,6 @@ function addEventListenerByClass(className, event, func) {
   });
 }
 addEventListenerByClass("th", "click", Sorting);
-// Sorting by column
-function Sorting(e) {
-  // console.log(e.target.dataset.column);
-  let column = e.target.dataset.column;
-  let order = e.target.dataset.order;
-  console.log(column, order);
-
-  getData().then((element) => {
-    let filteredData = [];
-
-    if (order === "desc") {
-      e.target.dataset.order = "asc";
-      // This is a sorting Algorithm
-      filteredData = element.sort((a, b) => (a[column] > b[column] ? 1 : -1));
-    } else {
-      e.target.dataset.order = "desc";
-      filteredData = element.sort((a, b) => (a[column] < b[column] ? 1 : -1));
-    }
-
-    populateTable(filteredData);
-  });
-  e.preventDefault();
-}
 
 // Listener for Search input
 const search = document
@@ -198,6 +175,40 @@ function cancelEdit(e) {
   if (e.target.classList.contains("post-cancel")) {
     changeFormState("add");
   }
+  e.preventDefault();
+}
+
+/* --------- Sorting --------- */
+// Sorting by column
+function Sorting(e) {
+  // console.log(e.target.dataset.column);
+  let column = e.target.dataset.column;
+  let order = e.target.dataset.order;
+  let arrows = document.querySelectorAll(".arrow");
+
+  getData().then((element) => {
+    let filteredData = [];
+
+    if (order === "desc") {
+      e.target.dataset.order = "asc";
+
+      // This is a sorting Algorithm
+      filteredData = element.sort((a, b) => (a[column] > b[column] ? 1 : -1));
+      // Change arrow from up to donw
+      Array.from(arrows).map((element) => {
+        element.innerHTML = "&#9660";
+      });
+    } else {
+      e.target.dataset.order = "desc";
+
+      filteredData = element.sort((a, b) => (a[column] < b[column] ? 1 : -1));
+      Array.from(arrows).map((element) => {
+        element.innerHTML = "&#9650";
+      });
+    }
+
+    populateTable(filteredData);
+  });
   e.preventDefault();
 }
 
